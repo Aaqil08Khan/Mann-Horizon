@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 100% 97%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 153 45% 18%;
+    --primary-foreground: 36 100% 97%;
+    --secondary: 153 40% 30%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 36 40% 92%;
+    --muted-foreground: 0 0% 29%;
+    --accent: 37 91% 55%;
+    --accent-foreground: 153 45% 18%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 36 30% 85%;
+    --input: 36 30% 85%;
+    --ring: 37 91% 55%;
+    --radius: 0.5rem;
+    --sidebar-background: 153 45% 18%;
+    --sidebar-foreground: 36 100% 97%;
+    --sidebar-primary: 37 91% 55%;
+    --sidebar-primary-foreground: 153 45% 18%;
+    --sidebar-accent: 153 40% 30%;
+    --sidebar-accent-foreground: 36 100% 97%;
+    --sidebar-border: 153 40% 25%;
+    --sidebar-ring: 37 91% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-cream text-text-dark font-body;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+/* Scroll animations */
+.scroll-fade {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.scroll-fade.scroll-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Stagger children */
+.scroll-fade:nth-child(2) { transition-delay: 0.1s; }
+.scroll-fade:nth-child(3) { transition-delay: 0.2s; }
+.scroll-fade:nth-child(4) { transition-delay: 0.3s; }
+.scroll-fade:nth-child(5) { transition-delay: 0.4s; }
+.scroll-fade:nth-child(6) { transition-delay: 0.5s; }
+
+/* Botanical pattern for dark sections */
+.botanical-bg {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 10 C30 25, 20 30, 10 40 C20 35, 30 38, 40 50 C50 38, 60 35, 70 40 C60 30, 50 25, 40 10Z' fill='%23ffffff' opacity='0.04'/%3E%3Cpath d='M20 60 C15 50, 10 55, 5 65 C10 60, 15 62, 20 70 C25 62, 30 60, 35 65 C30 55, 25 50, 20 60Z' fill='%23ffffff' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* Floating label styles */
+.floating-field {
+  position: relative;
+}
+.floating-field input,
+.floating-field textarea,
+.floating-field select {
+  @apply w-full bg-transparent border-0 border-b-2 border-forest/30 px-0 py-3 text-text-dark font-body outline-none transition-colors;
+}
+.floating-field input:focus,
+.floating-field textarea:focus,
+.floating-field select:focus {
+  @apply border-gold;
+}
+.floating-field label {
+  @apply absolute left-0 top-3 text-text-soft font-body transition-all pointer-events-none;
+}
+.floating-field input:focus ~ label,
+.floating-field input:not(:placeholder-shown) ~ label,
+.floating-field textarea:focus ~ label,
+.floating-field textarea:not(:placeholder-shown) ~ label,
+.floating-field select:focus ~ label,
+.floating-field select:valid ~ label {
+  @apply -top-2 text-xs text-gold;
+}
