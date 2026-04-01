@@ -1,5 +1,4 @@
 import { ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
 import { WHATSAPP_NUMBER } from "@/constants/data";
 
 const Hero = () => (
@@ -36,12 +35,12 @@ const Hero = () => (
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <Link
-          to="/booking"
+        <a
+          href="#enquiry"
           className="bg-gold text-forest font-body font-bold uppercase tracking-wider px-8 h-12 rounded-full flex items-center justify-center hover:bg-gold-light transition-colors text-sm"
         >
           Book Now
-        </Link>
+        </a>
 
         {/* ✅ Fixed WhatsApp button */}
         <a

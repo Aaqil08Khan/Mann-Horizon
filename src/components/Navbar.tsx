@@ -5,7 +5,8 @@ import { WHATSAPP_NUMBER } from "@/constants/data";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Location", href: "/#location" },
+  { label: "Book", href: "#enquiry" },
+  { label: "Location", href: "#location" },
 ];
 
 const Navbar = () => {
@@ -14,21 +15,21 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isBookingPage = location.pathname === "/booking";
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // On booking page navbar is always solid — never transparent
-  const alwaysSolid = isBookingPage;
-
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
-    if (href.startsWith("/#")) {
-      const sectionId = href.replace("/#", "");
+    if (href === "/") {
+      navigate("/");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (href.startsWith("#")) {
+      const sectionId = href.replace("#", "");
       if (location.pathname !== "/") {
         navigate("/");
         setTimeout(() => {
@@ -40,52 +41,42 @@ const Navbar = () => {
     }
   };
 
-  const textClass = alwaysSolid || scrolled
+  const textClass = scrolled
     ? "text-forest hover:text-gold"
     : "text-white/90 hover:text-gold";
 
-  const navBg = alwaysSolid || scrolled
+  const navBg = scrolled
     ? "bg-cream/95 backdrop-blur-md border-b border-gold/30 shadow-sm"
     : "bg-transparent";
 
-  const logoTextClass = alwaysSolid || scrolled ? "text-forest" : "text-white";
+  const logoTextClass = scrolled ? "text-forest" : "text-white";
+  const hamburgerClass = scrolled ? "text-forest" : "text-white";
 
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-20">
 
-          {/* Logo → always goes home */}
-          <Link to="/" className="flex items-center gap-2">
+          {/* Logo */}
+          <button onClick={() => handleNavClick("/")} className="flex items-center gap-2">
             <Leaf className="w-7 h-7 text-gold" />
-            <span className={`font-display font-bold text-[28px] tracking-widest ${logoTextClass}`}>
+            <span className={`font-display font-bold text-[18px] md:text-[26px] tracking-widest whitespace-nowrap ${logoTextClass}`}>
               MANN HORIZON
             </span>
-          </Link>
+          </button>
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              link.href.startsWith("/#") ? (
-                <button
-                  key={link.href}
-                  onClick={() => handleNavClick(link.href)}
-                  className={`font-body text-sm font-medium tracking-wide transition-colors relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gold after:transition-all hover:after:w-full ${textClass}`}
-                >
-                  {link.label}
-                </button>
-              ) : (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`font-body text-sm font-medium tracking-wide transition-colors relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gold after:transition-all hover:after:w-full ${textClass}`}
-                >
-                  {link.label}
-                </Link>
-              )
+              <button
+                key={link.href}
+                onClick={() => handleNavClick(link.href)}
+                className={`font-body text-sm font-medium tracking-wide transition-colors relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-gold after:transition-all hover:after:w-full ${textClass}`}
+              >
+                {link.label}
+              </button>
             ))}
 
-            {/* WhatsApp */}
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I'm interested in booking Mann Horizon.`}
               target="_blank"
@@ -95,18 +86,17 @@ const Navbar = () => {
               WhatsApp
             </a>
 
-            {/* Book Now */}
-            <Link
-              to="/booking"
+            <button
+              onClick={() => handleNavClick("#enquiry")}
               className="bg-gold text-forest font-body font-bold text-sm uppercase tracking-wider px-6 h-12 rounded-full flex items-center hover:bg-gold-light transition-colors"
             >
               Book Now
-            </Link>
+            </button>
           </div>
 
           {/* Mobile hamburger */}
           <button onClick={() => setMobileOpen(true)} className="md:hidden">
-            <Menu className={`w-7 h-7 ${alwaysSolid || scrolled ? "text-forest" : "text-white"}`} />
+            <Menu className={`w-7 h-7 ${hamburgerClass}`} />
           </button>
         </div>
       </nav>
@@ -119,27 +109,14 @@ const Navbar = () => {
           </button>
           <div className="flex flex-col items-center gap-8">
             {navLinks.map((link) => (
-              link.href.startsWith("/#") ? (
-                <button
-                  key={link.href}
-                  onClick={() => handleNavClick(link.href)}
-                  className="font-display text-3xl font-bold text-gold hover:text-gold-light transition-colors"
-                >
-                  {link.label}
-                </button>
-              ) : (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="font-display text-3xl font-bold text-gold hover:text-gold-light transition-colors"
-                >
-                  {link.label}
-                </Link>
-              )
+              <button
+                key={link.href}
+                onClick={() => handleNavClick(link.href)}
+                className="font-display text-3xl font-bold text-gold hover:text-gold-light transition-colors"
+              >
+                {link.label}
+              </button>
             ))}
-
-            {/* WhatsApp mobile */}
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I'm interested in booking Mann Horizon.`}
               target="_blank"
@@ -149,15 +126,12 @@ const Navbar = () => {
             >
               WhatsApp
             </a>
-
-            {/* Book Now mobile */}
-            <Link
-              to="/booking"
-              onClick={() => setMobileOpen(false)}
+            <button
+              onClick={() => handleNavClick("#enquiry")}
               className="mt-4 bg-gold text-forest font-body font-bold uppercase tracking-wider px-8 h-14 rounded-full flex items-center hover:bg-gold-light transition-colors"
             >
               Book Now
-            </Link>
+            </button>
           </div>
         </div>
       )}
