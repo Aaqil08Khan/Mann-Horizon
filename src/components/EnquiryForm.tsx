@@ -10,26 +10,34 @@ const EnquiryForm = () => {
   const [loading, setLoading] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-   console.log("SERVICE:", import.meta.env.VITE_EMAILJS_SERVICE_ID);
-console.log("TEMPLATE:", import.meta.env.VITE_EMAILJS_TEMPLATE_ID);
-console.log("KEY:", import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setLoading(true);
+  const form = e.currentTarget;
 
-    try {
-      await emailjs.sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_id",
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_id",
-        form,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "public_key"
-      );
-      setSubmitted(true);
-      setShowPayment(true);
-    } catch {
-      alert("Something went wrong. Please try again or contact us directly.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  // This will show in browser console if env vars are missing on Vercel
+  if (!serviceId || !templateId || !publicKey) {
+    console.error("EmailJS env vars missing:", { serviceId, templateId, publicKey });
+    alert("Configuration error. Please contact us directly.");
+    setLoading(false);
+    return;
+  }
+
+  try {
+    await emailjs.sendForm(serviceId, templateId, form, publicKey);
+    setSubmitted(true);
+    setShowPayment(true);
+  } catch (err) {
+    console.error("EmailJS error:", err);
+    alert("Something went wrong. Please try again or contact us directly.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section id="enquiry" className="bg-cream">
