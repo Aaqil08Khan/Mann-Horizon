@@ -11,9 +11,9 @@ const EnquiryForm = () => {
   const [showPayment, setShowPayment] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    const form = e.currentTarget;
+   console.log("SERVICE:", import.meta.env.VITE_EMAILJS_SERVICE_ID);
+console.log("TEMPLATE:", import.meta.env.VITE_EMAILJS_TEMPLATE_ID);
+console.log("KEY:", import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
 
     try {
       await emailjs.sendForm(
